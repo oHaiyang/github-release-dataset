@@ -1,0 +1,38 @@
+{
+  "name": "github-release-dataset",
+  "version": "0.0.1",
+  "description": "A library to add and update yaml persisted data in GitHub Issue Comment",
+  "main": "dist/github-release-dataset.cjs.js",
+  "module": "dist/github-release-dataset.module.js",
+  "browser": "dist/github-release-dataset.umd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oHaiyang/github-release-dataset.git"
+  },
+  "keywords": [
+    "persist",
+    "github",
+    "comment"
+  ],
+  "author": "phycgp@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oHaiyang/github-release-dataset/issues"
+  },
+  "homepage": "https://github.com/oHaiyang/github-release-dataset#readme",
+  "dependencies": {
+    "@octokit/rest": "^14.0.5",
+    "js-yaml": "^3.11.0"
+  },
+  "devDependencies": {
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.2.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "supports-color": "^5.4.0"
+  }
+}
