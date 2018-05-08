@@ -28,8 +28,8 @@ function readDatasets(releaseNote, datasetName) {
       const dataset = yaml.load(body);
       const name = dataset[DATASET_KEY];
 
-      // If datasetName are specified, return name matched dataset,
-      // otherwist return all datasets
+      // If datasetName are specified, return name matched datasets,
+      // otherwise return all datasets
       if (datasetName ? name === datasetName : !!name) {
         results.push({
           start,
