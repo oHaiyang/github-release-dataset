@@ -51,11 +51,18 @@ class Smuggler {
     }
   }
 
-  async addDataset(tag, datasetName, dataset, insertBeforeTop = false) {
+  async getDataset(tag, datasetName) {
+    const { body: releaseNote } = await this.getRelease(tag);
+    const [{ dataset }] = readDatasets(releaseNote, datasetName);
+
+    return dataset;
+  }
+
+  async addDataset(tag, datasetName, dataset, insertTop = true) {
     let { body: releaseNote } = await this.getRelease(tag);
 
-    let datasets = readDatasets(releaseNote, datasetName);
-    if (datasets.length > 0) {
+    const results = readDatasets(releaseNote, datasetName);
+    if (results.length > 0) {
       throw new Error(
         `Dataset named ${datasetName} already exists in ${tag}, failed to add.`
       );
@@ -63,7 +70,7 @@ class Smuggler {
 
     const yamlString = yaml.dump(buildDatasetObj(datasetName, dataset));
     const codeBlock = buildCodeBlock(yamlString);
-    if (insertBeforeTop) {
+    if (insertTop) {
       releaseNote = codeBlock + '\n' + releaseNote;
     } else {
       releaseNote = releaseNote + '\n' + codeBlock;
@@ -72,16 +79,49 @@ class Smuggler {
     await this.updateReleaseNote(tag, releaseNote);
   }
 
-  async updateDataset(tag, datasetName, dataset) {}
+  async updateDataset(
+    tag,
+    datasetName,
+    datasetOrUpdater,
+    addIfNotExisting = false
+  ) {
+    const { body: releaseNote } = await this.getRelease(tag);
+    const [result] = readDatasets(releaseNote, datasetName);
+    let newDataset = datasetOrUpdater;
+
+    if (!result && !addIfNotExisting) {
+      throw new Error(
+        `Update dataset ${datasetName} for ${tag} failed, dataset doesn't exist.`
+      );
+    }
+
+    if (typeof datasetOrUpdater === 'function') {
+      newDataset = datasetOrUpdater(result.dataset);
+    }
+
+    if (!result && addIfNotExisting) {
+      await this.addDataset(tag, datasetName, newDataset);
+      return;
+    }
+
+    let newReleaseNote = '';
+    newReleaseNote += releaseNote.slice(0, result.start);
+    newReleaseNote += buildCodeBlock(
+      yaml.dump(buildDatasetObj(datasetName, newDataset))
+    );
+    newReleaseNote += releaseNote.slice(result.start + result.length);
+
+    await this.updateReleaseNote(tag, newReleaseNote);
+  }
 
   async deleteDataset(tag, datasetName) {
     let { body: releaseNote } = await this.getRelease(tag);
 
     // Only delete first meeted block
-    let [firstDataset] = readDatasets(releaseNote, datasetName);
+    let [firstResult] = readDatasets(releaseNote, datasetName);
 
-    if (firstDataset) {
-      const { start, length } = firstDataset;
+    if (firstResult) {
+      const { start, length } = firstResult;
       releaseNote =
         releaseNote.slice(0, start) + releaseNote.slice(start + length);
     } else {
