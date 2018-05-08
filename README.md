@@ -1,2 +1,4 @@
 # github-release-dataset
-Made persisting structured data in GitHub release note easy.
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+Persists structured dataset in GitHub Release Note
