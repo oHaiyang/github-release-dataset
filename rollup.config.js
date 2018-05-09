@@ -1,29 +1,31 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
-import globals from 'rollup-plugin-node-globals';
 import builtins from 'rollup-plugin-node-builtins';
 import pkg from './package.json';
+import babel from 'rollup-plugin-babel';
 
 export default [
   // browser-friendly UMD build
   {
     input: 'src/index.js',
     output: {
-      name: 'grd',
+      name: 'Smuggler',
       file: pkg.browser,
       format: 'umd',
-      globals: {
-        ['supports-color']: 'supportsColor',
-      },
     },
     plugins: [
       resolve({
         preferBuiltins: false,
-      }), // so Rollup can find `ms`
-      commonjs(), // so Rollup can convert `ms` to an ES module
-      globals(),
+        browser: true,
+      }),
       builtins(),
+      commonjs({
+        ignoreGlobal: true,
+      }),
+      babel({
+        exclude: 'node_modules/**'
+      }),
       json(),
     ],
   },
