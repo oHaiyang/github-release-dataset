@@ -1,6 +1,6 @@
-const GitHub = require('@octokit/rest');
-const yaml = require('js-yaml');
-const { buildCodeBlock, buildDatasetObj, readDatasets } = require('./utils');
+import GitHub from '@octokit/rest';
+import yaml from 'js-yaml';
+import { buildCodeBlock, buildDatasetObj, readDatasets } from './utils';
 
 class Smuggler {
   constructor(token, owner, repo) {
@@ -132,4 +132,4 @@ class Smuggler {
   }
 }
 
-module.exports = Smuggler;
+export default Smuggler;
