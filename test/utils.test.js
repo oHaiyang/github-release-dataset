@@ -8,7 +8,6 @@ import {
 } from '../src/utils';
 
 const _jerryDatasetName = '_jerry';
-const _tomDatasetName = '_tom';
 const _mockNote = `
 this is a test line.
 
