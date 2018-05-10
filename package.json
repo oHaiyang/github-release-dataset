@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --single-quote --trailing-comma es5 --write ./src/**/*.js",
-    "build": "rollup -c"
+    "build": "NODE_ENV=production rollup -c",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -31,10 +32,13 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-jest": "^22.4.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
+    "jest": "^22.4.3",
     "prettier": "1.12.1",
+    "regenerator-runtime": "^0.11.1",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-commonjs": "^9.1.3",
