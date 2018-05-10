@@ -1,10 +1,15 @@
 /* eslint-env jest */
-import { buildCodeBlock, buildDatasetObj, readDatasets, COMMENT, DATASET_KEY } from '../src/utils';
+import {
+  buildCodeBlock,
+  buildDatasetObj,
+  readDatasets,
+  COMMENT,
+  DATASET_KEY,
+} from '../src/utils';
 
 const _jerryDatasetName = '_jerry';
 const _tomDatasetName = '_tom';
-const _mockNote = 
-`
+const _mockNote = `
 this is a test line.
 
 \`\`\`yaml
@@ -29,7 +34,6 @@ this is another test line
 `;
 
 describe('buildCodeBlock', () => {
-
   it('should return a yaml block', () => {
     const _text = '---';
 
@@ -41,11 +45,9 @@ ${COMMENT}
 
     expect(buildCodeBlock(_text)).toBe(_block);
   });
-
 });
 
 describe('buildDatasetObj', () => {
-
   it('should consturct a dataset object', () => {
     const _name = '_jerry';
     const _dataset = {
@@ -57,11 +59,9 @@ describe('buildDatasetObj', () => {
       dataset: _dataset,
     });
   });
-
 });
 
 describe('readDatasets', () => {
-
   it('should read all datasets when datasetName not provided', () => {
     expect(readDatasets(_mockNote)).toMatchSnapshot();
   });

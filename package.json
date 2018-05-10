@@ -7,7 +7,7 @@
   "browser": "dist/github-release-dataset.umd.js",
   "scripts": {
     "test": "jest",
-    "prettier": "prettier --single-quote --trailing-comma es5 --write ./src/**/*.js",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write ./src/**/*.js ./test/**/*.js",
     "build": "NODE_ENV=production rollup -c"
   },
   "repository": {
