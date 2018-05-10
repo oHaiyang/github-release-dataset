@@ -125,7 +125,7 @@ class Smuggler {
       releaseNote =
         releaseNote.slice(0, start) + releaseNote.slice(start + length);
     } else {
-      console.warn("Dataset doesn't exist, deletion not performed.");
+      console.warn('Dataset doesn\'t exist, deletion not performed.');
     }
 
     await this.updateReleaseNote(tag, releaseNote);
