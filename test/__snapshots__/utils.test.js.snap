@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readDatasets should read all datasets when datasetName not provided 1`] = `
+Array [
+  Object {
+    "body": "dataset-name: _jerry
+dataset:
+  _foe: _tom",
+    "dataset": Object {
+      "dataset": Object {
+        "_foe": "_tom",
+      },
+      "dataset-name": "_jerry",
+    },
+    "length": 54,
+    "name": "_jerry",
+    "start": 58,
+  },
+  Object {
+    "body": "dataset-name: _tom
+dataset:
+  _food: _jerry",
+    "dataset": Object {
+      "dataset": Object {
+        "_food": "_jerry",
+      },
+      "dataset-name": "_tom",
+    },
+    "length": 55,
+    "name": "_tom",
+    "start": 124,
+  },
+]
+`;
+
+exports[`readDatasets should read datasets have specified name 1`] = `
+Array [
+  Object {
+    "body": "dataset-name: _jerry
+dataset:
+  _foe: _tom",
+    "dataset": Object {
+      "dataset": Object {
+        "_foe": "_tom",
+      },
+      "dataset-name": "_jerry",
+    },
+    "length": 54,
+    "name": "_jerry",
+    "start": 58,
+  },
+]
+`;
