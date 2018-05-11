@@ -4,6 +4,8 @@ import {
   buildDatasetObj,
   readDatasets,
   insertIntoNote,
+  getNewDataset,
+  getSplicedNote,
   COMMENT,
   DATASET_KEY,
 } from '../src/utils';
@@ -82,5 +84,34 @@ describe('insertIntoNote', () => {
 
   it('should insert to top', () => {
     expect(insertIntoNote(note, text, true)).toBe(`${text}\n${note}`);
+  });
+});
+
+describe('getNewDataset', () => {
+  const _mockedNewDataset2 = { key: '_updatedByUpdater' };
+  const _mockedUpdater = jest.fn(() => _mockedNewDataset2);
+  const _mockedOldDataset = { key: '_old' };
+  const _mockedNewDataset = { key: '_new' };
+
+  it('should return new dataset object', () => {
+    expect(getNewDataset(_mockedNewDataset, _mockedOldDataset)).toEqual(
+      _mockedNewDataset
+    );
+  });
+
+  it('should update dataset up updater', () => {
+    expect(getNewDataset(_mockedUpdater, _mockedOldDataset)).toEqual(
+      _mockedNewDataset2
+    );
+  });
+});
+
+describe('getSplicedNote', () => {
+  it('should spliced note', () => {
+    expect(getSplicedNote('yep', 0, 0)).toBe('yep');
+    expect(getSplicedNote('yep', 0, 1)).toBe('ep');
+    expect(getSplicedNote('yep', 1, 1)).toBe('yp');
+    expect(getSplicedNote('yep', 2, 0, 'l')).toBe('yelp');
+    expect(getSplicedNote('yep', 2, 1, 's')).toBe('yes');
   });
 });

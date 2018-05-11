@@ -10,13 +10,20 @@ const _mockDatasetName = '_jerry';
 const _mockDataset = {
   _foe: '_tom',
 };
-const _mockReleaseId = '2333';
-const _mockReleaseNote = `
-\`\`\`yaml
-dataset-name: ${_mockTagName}
+const _mockYamlString = `
+dataset-name: ${_mockDatasetName}
 dataset:
   _foe: _tom
+`;
+const _mockDatasetCodeBlock = `
+\`\`\`yaml
+${_mockYamlString}
 \`\`\`
+`;
+const _mockReleaseId = '2333';
+const _mockReleaseNote = `
+${_mockTagName}
+${_mockDatasetCodeBlock}
 `;
 const _mockReleaseData = {
   id: _mockReleaseId,
@@ -28,12 +35,32 @@ const _mockRelease = {
   data: _mockReleaseData,
 };
 
+const _mockNewDataset = { _friend: '_pug' };
+const _mockNewYamlString = `
+dataset-name: ${_mockTagName}
+dataset:
+  _friend: _pug
+`;
+const _mockNewDatasetCodeBlock = `
+\`\`\`yaml
+${_mockNewYamlString}
+\`\`\`
+`;
+const _mockNewReleaseNote = `
+${_mockTagName}
+${_mockNewDatasetCodeBlock}
+`;
+
 let s;
-let mockedReadDatasets;
-let mockedBuildDatasetObj;
-let mockedBuildCodeBlock;
-let mockedInsertIntoNote;
-let mockedDump;
+const {
+  readDatasets: mockedReadDatasets,
+  buildDatasetObj: mockedBuildDatasetObj,
+  buildCodeBlock: mockedBuildCodeBlock,
+  insertIntoNote: mockedInsertIntoNote,
+  getNewDataset: mockedGetNewDataset,
+  getSplicedNote: mockedGetSplicedNote,
+} = require('../src/utils');
+const { dump: mockedDump } = require('js-yaml');
 
 describe('getRelease', () => {
   beforeEach(() => {
@@ -72,8 +99,6 @@ describe('getRelease', () => {
 });
 
 describe('updateReleaseNote', () => {
-  const _mockNewReleaseNote = 'Heyo';
-
   beforeEach(() => {
     s = new Smuggler();
   });
@@ -132,13 +157,6 @@ describe('addDataset', () => {
     s.getRelease = jest.fn();
     s.updateReleaseNote = jest.fn();
     s.getRelease.mockResolvedValueOnce({});
-    ({
-      readDatasets: mockedReadDatasets,
-      buildDatasetObj: mockedBuildDatasetObj,
-      buildCodeBlock: mockedBuildCodeBlock,
-      insertIntoNote: mockedInsertIntoNote,
-    } = require('../src/utils'));
-    ({ dump: mockedDump } = require('js-yaml'));
   });
 
   it('should throw if dataset exists', async () => {
@@ -166,4 +184,95 @@ describe('addDataset', () => {
 });
 
 describe('updateDataset', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+
+    s = new Smuggler();
+    s.getRelease = jest.fn();
+    s.getRelease.mockResolvedValueOnce({ body: _mockReleaseNote });
+    s.addDataset = jest.fn();
+    s.updateReleaseNote = jest.fn();
+  });
+
+  it('should add if dataset not exits', async () => {
+    mockedReadDatasets.mockReturnValueOnce([]);
+
+    try {
+      await s.updateDataset(_mockTagName, _mockDatasetName, _mockNewDataset);
+    } catch (e) {
+      expect(s.getRelease).toHaveBeenCalledTimes(1);
+      expect(mockedReadDatasets).toHaveBeenCalledTimes(1);
+      expect(e.message).toMatchSnapshot();
+    }
+  });
+
+  it("should add if dataset does't not exit", async () => {
+    mockedReadDatasets.mockReturnValueOnce([]);
+    mockedGetNewDataset.mockReturnValueOnce(_mockNewDataset);
+
+    await s.updateDataset(
+      _mockTagName,
+      _mockDatasetName,
+      _mockNewDataset,
+      true
+    );
+
+    expect(s.addDataset).toHaveBeenCalledTimes(1);
+    expect(s.addDataset.mock.calls[0][0]).toBe(_mockTagName);
+    expect(s.addDataset.mock.calls[0][1]).toBe(_mockDatasetName);
+    expect(s.addDataset.mock.calls[0][2]).toEqual(_mockNewDataset);
+
+    expect(s.updateReleaseNote).toHaveBeenCalledTimes(0);
+  });
+
+  it('should update the dataset', async () => {
+    const start = 2;
+    const length = 3;
+    mockedReadDatasets.mockReturnValueOnce([
+      { dataset: _mockDataset, start, length },
+    ]);
+    mockedGetNewDataset.mockReturnValueOnce(_mockNewDataset);
+    mockedBuildDatasetObj.mockReturnValueOnce({
+      'dateset-name': _mockDatasetName,
+      dataset: _mockNewDataset,
+    });
+    mockedDump.mockReturnValueOnce(_mockNewYamlString);
+    mockedBuildCodeBlock.mockReturnValueOnce(_mockNewDatasetCodeBlock);
+    mockedGetSplicedNote.mockReturnValueOnce(_mockNewReleaseNote);
+
+    await s.updateDataset(_mockTagName, _mockDatasetName, _mockNewDataset);
+
+    expect(mockedReadDatasets).toHaveBeenCalledTimes(1);
+    expect(mockedReadDatasets.mock.calls[0][0]).toBe(_mockReleaseNote);
+    expect(mockedReadDatasets.mock.calls[0][1]).toBe(_mockDatasetName);
+
+    expect(mockedGetNewDataset).toHaveBeenCalledTimes(1);
+    expect(mockedGetNewDataset.mock.calls[0][0]).toBe(_mockNewDataset);
+    expect(mockedGetNewDataset.mock.calls[0][1]).toBe(_mockDataset);
+
+    expect(mockedBuildDatasetObj).toHaveBeenCalledTimes(1);
+    expect(mockedBuildDatasetObj.mock.calls[0][0]).toBe(_mockDatasetName);
+    expect(mockedBuildDatasetObj.mock.calls[0][1]).toBe(_mockNewDataset);
+
+    expect(mockedDump).toHaveBeenCalledTimes(1);
+    expect(mockedDump.mock.calls[0][0]).toEqual({
+      'dateset-name': _mockDatasetName,
+      dataset: _mockNewDataset,
+    });
+
+    expect(mockedBuildCodeBlock).toHaveBeenCalledTimes(1);
+    expect(mockedBuildCodeBlock.mock.calls[0][0]).toBe(_mockNewYamlString);
+
+    expect(mockedGetSplicedNote).toHaveBeenCalledTimes(1);
+    expect(mockedGetSplicedNote.mock.calls[0][0]).toBe(_mockReleaseNote);
+    expect(mockedGetSplicedNote.mock.calls[0][1]).toBe(start);
+    expect(mockedGetSplicedNote.mock.calls[0][2]).toBe(length);
+    expect(mockedGetSplicedNote.mock.calls[0][3]).toBe(
+      _mockNewDatasetCodeBlock
+    );
+
+    expect(s.updateReleaseNote).toHaveBeenCalledTimes(1);
+    expect(s.updateReleaseNote.mock.calls[0][0]).toBe(_mockTagName);
+    expect(s.updateReleaseNote.mock.calls[0][1]).toBe(_mockNewReleaseNote);
+  });
 });

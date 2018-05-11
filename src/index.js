@@ -5,6 +5,8 @@ import {
   buildDatasetObj,
   readDatasets,
   insertIntoNote,
+  getNewDataset,
+  getSplicedNote,
 } from './utils';
 
 class Smuggler {
@@ -88,7 +90,6 @@ class Smuggler {
   ) {
     const { body: releaseNote } = await this.getRelease(tag);
     const [result] = readDatasets(releaseNote, datasetName);
-    let newDataset = datasetOrUpdater;
 
     if (!result && !addIfNotExisting) {
       throw new Error(
@@ -96,21 +97,25 @@ class Smuggler {
       );
     }
 
-    if (typeof datasetOrUpdater === 'function') {
-      newDataset = datasetOrUpdater(result.dataset);
-    }
+    const newDataset = getNewDataset(
+      datasetOrUpdater,
+      result && result.dataset
+    );
 
     if (!result && addIfNotExisting) {
       await this.addDataset(tag, datasetName, newDataset);
       return;
     }
 
-    let newReleaseNote = '';
-    newReleaseNote += releaseNote.slice(0, result.start);
-    newReleaseNote += buildCodeBlock(
+    const newDatasetCodeBlock = buildCodeBlock(
       yaml.dump(buildDatasetObj(datasetName, newDataset))
     );
-    newReleaseNote += releaseNote.slice(result.start + result.length);
+    const newReleaseNote = getSplicedNote(
+      releaseNote,
+      result.start,
+      result.length,
+      newDatasetCodeBlock
+    );
 
     await this.updateReleaseNote(tag, newReleaseNote);
   }

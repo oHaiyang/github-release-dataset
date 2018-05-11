@@ -53,3 +53,17 @@ export function insertIntoNote(note, text, top) {
   }
   return note + '\n' + text;
 }
+
+export function getSplicedNote(note, start, length, text = '') {
+  let nextString = note.slice(0, start);
+  nextString += text;
+  nextString += note.slice(start + length);
+  return nextString;
+}
+
+export function getNewDataset(newDatasetOrUpdater, oldDataset) {
+  if (typeof newDatasetOrUpdater === 'function') {
+    return newDatasetOrUpdater(oldDataset);
+  }
+  return newDatasetOrUpdater;
+}
