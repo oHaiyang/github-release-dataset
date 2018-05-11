@@ -25,6 +25,9 @@ const _mockedReleaseNote = `
 ${_mockedTagName}
 ${_mockedDatasetCodeBlock}
 `;
+const _mockedDeletedReleaseNote = `
+${_mockedTagName}
+`;
 const _mockedReleaseData = {
   id: _mockedReleaseId,
   tag_name: _mockedTagName,
@@ -284,5 +287,56 @@ describe('updateDataset', () => {
     expect(s.updateReleaseNote).toHaveBeenCalledTimes(1);
     expect(s.updateReleaseNote.mock.calls[0][0]).toBe(_mockedTagName);
     expect(s.updateReleaseNote.mock.calls[0][1]).toBe(_mockedNewReleaseNote);
+  });
+
+  describe('deleteDataset', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+
+      s = new Smuggler();
+      s.getRelease = jest.fn();
+      s.getRelease.mockResolvedValueOnce({ body: _mockedReleaseNote });
+      s.updateReleaseNote = jest.fn();
+    });
+
+    it('should delete the dataset', async () => {
+      const start = 2;
+      const length = 3;
+      _mockedReadDatasets.mockReturnValueOnce([{ start, length }]);
+      _mockedGetSplicedNote.mockReturnValueOnce(_mockedDeletedReleaseNote);
+
+      await s.deleteDataset(_mockedTagName, _mockedDatasetName);
+
+      expect(s.getRelease).toHaveBeenCalledTimes(1);
+      expect(s.getRelease.mock.calls[0][0]).toBe(_mockedTagName);
+
+      expect(_mockedReadDatasets).toHaveBeenCalledTimes(1);
+      expect(_mockedReadDatasets.mock.calls[0][0]).toBe(_mockedReleaseNote);
+      expect(_mockedReadDatasets.mock.calls[0][1]).toBe(_mockedDatasetName);
+
+      expect(_mockedGetSplicedNote).toHaveBeenCalledTimes(1);
+      expect(_mockedGetSplicedNote.mock.calls[0][0]).toBe(_mockedReleaseNote);
+      expect(_mockedGetSplicedNote.mock.calls[0][1]).toBe(start);
+      expect(_mockedGetSplicedNote.mock.calls[0][2]).toBe(length);
+
+      expect(s.updateReleaseNote).toHaveBeenCalledTimes(1);
+      expect(s.updateReleaseNote.mock.calls[0][0]).toBe(_mockedTagName);
+      expect(s.updateReleaseNote.mock.calls[0][1]).toBe(
+        _mockedDeletedReleaseNote
+      );
+    });
+
+    it('should do noting if dataset does not exist', async () => {
+      global.console = { warn: jest.fn() };
+      _mockedReadDatasets.mockReturnValueOnce([]);
+
+      await s.deleteDataset(_mockedTagName, _mockedDatasetName);
+
+      expect(s.getRelease).toHaveBeenCalledTimes(1);
+      expect(s.getRelease.mock.calls[0][0]).toBe(_mockedTagName);
+
+      expect(_mockedGetSplicedNote).toHaveBeenCalledTimes(0);
+      expect(global.console.warn).toHaveBeenCalledTimes(1);
+    });
   });
 });
