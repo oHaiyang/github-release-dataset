@@ -1,18 +1,10 @@
+/* eslint-env jest */
 export default function GitHub() {
-  const repos = {};
-  const mockReleases = {};
-
-  function __setReleases(tag, note) {
-    mockReleases[tag] = note;
-  }
-
   const editRelease = jest.fn(async () => {});
 
   const authenticate = jest.fn(() => {});
 
-  const getReleaseByTag = jest.fn(async ({ tag }) => {
-     return mockRelease[tag]; 
-  })
+  const getReleaseByTag = jest.fn(async () => {});
 
   return {
     authenticate,
@@ -20,5 +12,5 @@ export default function GitHub() {
       editRelease,
       getReleaseByTag,
     },
-  }
+  };
 }

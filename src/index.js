@@ -1,6 +1,11 @@
 import GitHub from '@octokit/rest';
 import yaml from 'js-yaml';
-import { buildCodeBlock, buildDatasetObj, readDatasets } from './utils';
+import {
+  buildCodeBlock,
+  buildDatasetObj,
+  readDatasets,
+  insertIntoNote,
+} from './utils';
 
 class Smuggler {
   constructor(token, owner, repo) {
@@ -70,11 +75,7 @@ class Smuggler {
 
     const yamlString = yaml.dump(buildDatasetObj(datasetName, dataset));
     const codeBlock = buildCodeBlock(yamlString);
-    if (insertTop) {
-      releaseNote = codeBlock + '\n' + releaseNote;
-    } else {
-      releaseNote = releaseNote + '\n' + codeBlock;
-    }
+    releaseNote = insertIntoNote(releaseNote, codeBlock, insertTop);
 
     await this.updateReleaseNote(tag, releaseNote);
   }
@@ -125,7 +126,7 @@ class Smuggler {
       releaseNote =
         releaseNote.slice(0, start) + releaseNote.slice(start + length);
     } else {
-      console.warn('Dataset doesn\'t exist, deletion not performed.');
+      console.warn("Dataset doesn't exist, deletion not performed.");
     }
 
     await this.updateReleaseNote(tag, releaseNote);

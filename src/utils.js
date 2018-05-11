@@ -46,3 +46,10 @@ export function readDatasets(releaseNote, datasetName) {
 
   return results;
 }
+
+export function insertIntoNote(note, text, top) {
+  if (top) {
+    return text + '\n' + note;
+  }
+  return note + '\n' + text;
+}

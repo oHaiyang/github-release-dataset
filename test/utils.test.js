@@ -3,6 +3,7 @@ import {
   buildCodeBlock,
   buildDatasetObj,
   readDatasets,
+  insertIntoNote,
   COMMENT,
   DATASET_KEY,
 } from '../src/utils';
@@ -67,5 +68,19 @@ describe('readDatasets', () => {
 
   it('should read datasets have specified name', () => {
     expect(readDatasets(_mockNote, _jerryDatasetName)).toMatchSnapshot();
+  });
+});
+
+describe('insertIntoNote', () => {
+  const note = '_note';
+  const text = '_text';
+
+  it('should insert and defaultly insert to bottom', () => {
+    expect(insertIntoNote(note, text)).toBe(`${note}\n${text}`);
+    expect(insertIntoNote(note, text, false)).toBe(`${note}\n${text}`);
+  });
+
+  it('should insert to top', () => {
+    expect(insertIntoNote(note, text, true)).toBe(`${text}\n${note}`);
   });
 });

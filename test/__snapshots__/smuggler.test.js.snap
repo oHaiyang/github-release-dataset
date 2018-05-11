@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addDataset should throw if dataset exists 1`] = `[Error: Dataset named undefined already exists in undefined, failed to add.]`;
