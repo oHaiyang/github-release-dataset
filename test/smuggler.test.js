@@ -28,9 +28,19 @@ const _mockRelease = {
   data: _mockReleaseData,
 };
 
+let s;
+let mockedReadDatasets;
+let mockedBuildDatasetObj;
+let mockedBuildCodeBlock;
+let mockedInsertIntoNote;
+let mockedDump;
+
 describe('getRelease', () => {
+  beforeEach(() => {
+    s = new Smuggler();
+  });
+
   it('should return cached release if exists', async () => {
-    const s = new Smuggler();
     s.releases[_mockTagName] = _mockRelease;
 
     expect(await s.getRelease(_mockTagName)).toEqual(_mockRelease);
@@ -38,7 +48,6 @@ describe('getRelease', () => {
   });
 
   it('should return get release and cache it and return', async () => {
-    const s = new Smuggler();
     s.g.repos.getReleaseByTag.mockResolvedValue(_mockRelease);
 
     const result = await s.getRelease(_mockTagName);
@@ -49,7 +58,6 @@ describe('getRelease', () => {
   });
 
   it('should rethrow an error when get remote relase failed', async () => {
-    const s = new Smuggler();
     const errorMessage = 'error message';
     s.g.repos.getReleaseByTag.mockRejectedValueOnce(new Error(errorMessage));
 
@@ -66,8 +74,11 @@ describe('getRelease', () => {
 describe('updateReleaseNote', () => {
   const _mockNewReleaseNote = 'Heyo';
 
+  beforeEach(() => {
+    s = new Smuggler();
+  });
+
   it('update a release with valid payload and udpate cache', async () => {
-    const s = new Smuggler();
     s.getRelease = jest.fn();
     s.getRelease.mockResolvedValueOnce(_mockReleaseData);
     s.releases[_mockTagName] = _mockReleaseData;
@@ -83,7 +94,6 @@ describe('updateReleaseNote', () => {
   });
 
   it('should rethrow an error when update failed', async () => {
-    const s = new Smuggler();
     s.getRelease = jest.fn().mockResolvedValueOnce({ id: '_id' });
     const errorMessage = 'error message';
     s.g.repos.editRelease.mockRejectedValueOnce(new Error(errorMessage));
@@ -100,7 +110,6 @@ describe('updateReleaseNote', () => {
 
 describe('getDataset', () => {
   it('should read datasets', async () => {
-    const s = new Smuggler();
     s.getRelease = jest.fn().mockResolvedValueOnce({ body: _mockReleaseNote });
     const mockedReadDatasets = require('../src/utils').readDatasets;
     mockedReadDatasets.mockReturnValueOnce([{ dataset: _mockDataset }]);
@@ -116,13 +125,6 @@ describe('getDataset', () => {
 });
 
 describe('addDataset', () => {
-  let s;
-  let mockedReadDatasets;
-  let mockedBuildDatasetObj;
-  let mockedBuildCodeBlock;
-  let mockedInsertIntoNote;
-  let mockedDump;
-
   beforeEach(() => {
     jest.resetAllMocks();
 
@@ -161,4 +163,7 @@ describe('addDataset', () => {
     expect(mockedInsertIntoNote).toHaveBeenCalledTimes(1);
     expect(s.updateReleaseNote).toHaveBeenCalledTimes(1);
   });
+});
+
+describe('updateDataset', () => {
 });
