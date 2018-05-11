@@ -11,7 +11,7 @@ import {
 } from '../src/utils';
 
 const _jerryDatasetName = '_jerry';
-const _mockNote = `
+const _mockedNote = `
 this is a test line.
 
 \`\`\`yaml
@@ -65,11 +65,11 @@ describe('buildDatasetObj', () => {
 
 describe('readDatasets', () => {
   it('should read all datasets when datasetName not provided', () => {
-    expect(readDatasets(_mockNote)).toMatchSnapshot();
+    expect(readDatasets(_mockedNote)).toMatchSnapshot();
   });
 
   it('should read datasets have specified name', () => {
-    expect(readDatasets(_mockNote, _jerryDatasetName)).toMatchSnapshot();
+    expect(readDatasets(_mockedNote, _jerryDatasetName)).toMatchSnapshot();
   });
 });
 
