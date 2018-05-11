@@ -16,11 +16,13 @@ export default [
     plugins: [
       resolve({
         preferBuiltins: false,
-        browser: true,
       }),
       builtins(),
       commonjs({
-        ignoreGlobal: true,
+        ignoreGlobal: false,
+        namedExports: {
+          'node_modules/punycode/punycode.js': [ 'toASCII' ]
+        }
       }),
       babel({
         exclude: 'node_modules/**',
@@ -31,6 +33,7 @@ export default [
 
   {
     input: 'src/index.js',
+    external: ['js-yaml', '@octokit/rest'],
     output: [
       { file: pkg.main, format: 'cjs' },
       { file: pkg.module, format: 'es' },
