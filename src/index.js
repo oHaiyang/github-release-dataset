@@ -128,13 +128,11 @@ class Smuggler {
 
     if (firstResult) {
       const { start, length } = firstResult;
-      releaseNote =
-        releaseNote.slice(0, start) + releaseNote.slice(start + length);
+      releaseNote = getSplicedNote(releaseNote, start, length);
+      await this.updateReleaseNote(tag, releaseNote);
     } else {
       console.warn("Dataset doesn't exist, deletion not performed.");
     }
-
-    await this.updateReleaseNote(tag, releaseNote);
   }
 }
 
