@@ -28,8 +28,9 @@ function readDatasets(releaseNote, datasetName) {
       const length = datasetMatch[0].length;
       const start = datasetMatch.index;
       const body = datasetMatch[1];
-      const dataset = yaml.load(body);
-      const name = dataset[DATASET_KEY];
+      const datasetObj = yaml.load(body);
+      const name = datasetObj[DATASET_KEY];
+      const { dataset } = datasetObj;
 
       // If datasetName are specified, return name matched datasets,
       // otherwise return all datasets
@@ -40,6 +41,7 @@ function readDatasets(releaseNote, datasetName) {
           name,
           body,
           dataset,
+          datasetObj,
         });
       }
     }

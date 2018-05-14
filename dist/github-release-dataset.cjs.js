@@ -37,18 +37,21 @@ function readDatasets(releaseNote, datasetName) {
       var length = datasetMatch[0].length;
       var start = datasetMatch.index;
       var body = datasetMatch[1];
-      var dataset = yaml.load(body);
-      var name = dataset[DATASET_KEY];
+      var datasetObj = yaml.load(body);
+      var name = datasetObj[DATASET_KEY];
+      var dataset = datasetObj.dataset;
 
       // If datasetName are specified, return name matched datasets,
       // otherwise return all datasets
+
       if (datasetName ? name === datasetName : !!name) {
         results.push({
           start: start,
           length: length,
           name: name,
           body: body,
-          dataset: dataset
+          dataset: dataset,
+          datasetObj: datasetObj
         });
       }
     }

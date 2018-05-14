@@ -7,6 +7,9 @@ Array [
 dataset:
   _foe: _tom",
     "dataset": Object {
+      "_foe": "_tom",
+    },
+    "datasetObj": Object {
       "dataset": Object {
         "_foe": "_tom",
       },
@@ -21,6 +24,9 @@ dataset:
 dataset:
   _food: _jerry",
     "dataset": Object {
+      "_food": "_jerry",
+    },
+    "datasetObj": Object {
       "dataset": Object {
         "_food": "_jerry",
       },
@@ -40,6 +46,9 @@ Array [
 dataset:
   _foe: _tom",
     "dataset": Object {
+      "_foe": "_tom",
+    },
+    "datasetObj": Object {
       "dataset": Object {
         "_foe": "_tom",
       },
