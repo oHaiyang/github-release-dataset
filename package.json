@@ -1,6 +1,6 @@
 {
   "name": "github-release-dataset",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A library to add and update yaml persisted data in GitHub Issue Comment",
   "main": "dist/github-release-dataset.cjs.js",
   "module": "dist/github-release-dataset.module.js",
