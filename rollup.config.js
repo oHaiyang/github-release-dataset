@@ -26,6 +26,7 @@ export default [
       }),
       babel({
         exclude: 'node_modules/**',
+        runtimeHelpers: true,
       }),
       json(),
     ],
@@ -41,6 +42,7 @@ export default [
     plugins: [
       babel({
         exclude: 'node_modules/**',
+        runtimeHelpers: true,
       }),
     ],
   },

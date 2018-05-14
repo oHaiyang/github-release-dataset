@@ -5,7 +5,7 @@
       "presets": [["env"], "stage-3"],
     },
     "production": {
-      "plugins": ["external-helpers"],
+      "plugins": ["transform-runtime", "external-helpers"],
     },
   }
 }
