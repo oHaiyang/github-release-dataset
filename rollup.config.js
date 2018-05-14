@@ -35,15 +35,21 @@ export default [
   {
     input: 'src/index.js',
     external: ['js-yaml', '@octokit/rest'],
-    output: [
-      { file: pkg.main, format: 'cjs' },
-      { file: pkg.module, format: 'es' },
-    ],
+    output: { file: pkg.main, format: 'cjs' },
     plugins: [
       babel({
         exclude: 'node_modules/**',
         runtimeHelpers: true,
       }),
     ],
+  },
+
+  {
+    input: 'src/index.js',
+    external: ['js-yaml', '@octokit/rest'],
+    output: {
+      file: pkg.module,
+      format: 'es',
+    },
   },
 ];
