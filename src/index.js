@@ -60,7 +60,7 @@ class Smuggler {
 
   async getDataset(tag, datasetName) {
     const { body: releaseNote } = await this.getRelease(tag);
-    const [{ dataset }] = readDatasets(releaseNote, datasetName);
+    const [{ dataset } = {}] = readDatasets(releaseNote, datasetName);
 
     return dataset;
   }
