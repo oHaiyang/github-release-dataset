@@ -35737,7 +35737,7 @@
 	    key: 'getDataset',
 	    value: function () {
 	      var _ref5 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(tag, datasetName) {
-	        var _ref6, releaseNote, _readDatasets, _readDatasets2, dataset;
+	        var _ref6, releaseNote, _readDatasets, _readDatasets2, _readDatasets2$, dataset;
 
 	        return regenerator.wrap(function _callee3$(_context3) {
 	          while (1) {
@@ -35749,10 +35749,12 @@
 	              case 2:
 	                _ref6 = _context3.sent;
 	                releaseNote = _ref6.body;
-	                _readDatasets = readDatasets(releaseNote, datasetName), _readDatasets2 = _slicedToArray(_readDatasets, 1), dataset = _readDatasets2[0].dataset;
+	                _readDatasets = readDatasets(releaseNote, datasetName), _readDatasets2 = _slicedToArray(_readDatasets, 1), _readDatasets2$ = _readDatasets2[0];
+	                _readDatasets2$ = _readDatasets2$ === undefined ? {} : _readDatasets2$;
+	                dataset = _readDatasets2$.dataset;
 	                return _context3.abrupt('return', dataset);
 
-	              case 6:
+	              case 8:
 	              case 'end':
 	                return _context3.stop();
 	            }
