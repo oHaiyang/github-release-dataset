@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`readDatasets should read all datasets when datasetName not provided 1`] = `
+exports[`parseDatasets should read all datasets when datasetName not provided 1`] = `
 Array [
   Object {
     "body": "dataset-name: _jerry
@@ -39,7 +39,7 @@ dataset:
 ]
 `;
 
-exports[`readDatasets should read datasets have specified name 1`] = `
+exports[`parseDatasets should read datasets have specified name 1`] = `
 Array [
   Object {
     "body": "dataset-name: _jerry

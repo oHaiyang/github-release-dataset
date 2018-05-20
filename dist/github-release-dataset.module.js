@@ -18,7 +18,7 @@ function buildDatasetObj(name, dataset) {
   };
 }
 
-function readDatasets(releaseNote, datasetName) {
+function parseDatasets(releaseNote, datasetName) {
   let datasetMatch;
   let results = [];
 
@@ -48,6 +48,12 @@ function readDatasets(releaseNote, datasetName) {
   } while (datasetMatch);
 
   return results;
+}
+
+function readDataset(releaseNote, datasetName) {
+  const [{ dataset } = {}] = parseDatasets(releaseNote, datasetName);
+
+  return dataset;
 }
 
 function insertIntoNote(note, text, top) {
@@ -122,15 +128,13 @@ class Smuggler {
 
   async getDataset(tag, datasetName) {
     const { body: releaseNote } = await this.getRelease(tag);
-    const [{ dataset } = {}] = readDatasets(releaseNote, datasetName);
-
-    return dataset;
+    return readDataset(releaseNote, datasetName);
   }
 
   async addDataset(tag, datasetName, dataset, insertTop = true) {
     let { body: releaseNote } = await this.getRelease(tag);
 
-    const results = readDatasets(releaseNote, datasetName);
+    const results = parseDatasets(releaseNote, datasetName);
     if (results.length > 0) {
       throw new Error(
         `Dataset named ${datasetName} already exists in ${tag}, failed to add.`
@@ -151,7 +155,7 @@ class Smuggler {
     addIfNotExisting = false
   ) {
     const { body: releaseNote } = await this.getRelease(tag);
-    const [result] = readDatasets(releaseNote, datasetName);
+    const [result] = parseDatasets(releaseNote, datasetName);
 
     if (!result && !addIfNotExisting) {
       throw new Error(
@@ -186,7 +190,7 @@ class Smuggler {
     let { body: releaseNote } = await this.getRelease(tag);
 
     // Only delete first meeted block
-    let [firstResult] = readDatasets(releaseNote, datasetName);
+    let [firstResult] = parseDatasets(releaseNote, datasetName);
 
     if (firstResult) {
       const { start, length } = firstResult;
@@ -197,5 +201,7 @@ class Smuggler {
     }
   }
 }
+
+Smuggler.readDataset = readDataset;
 
 export default Smuggler;

@@ -2,7 +2,7 @@
 import {
   buildCodeBlock,
   buildDatasetObj,
-  readDatasets,
+  parseDatasets,
   insertIntoNote,
   getNewDataset,
   getSplicedNote,
@@ -63,13 +63,13 @@ describe('buildDatasetObj', () => {
   });
 });
 
-describe('readDatasets', () => {
+describe('parseDatasets', () => {
   it('should read all datasets when datasetName not provided', () => {
-    expect(readDatasets(_mockedNote)).toMatchSnapshot();
+    expect(parseDatasets(_mockedNote)).toMatchSnapshot();
   });
 
   it('should read datasets have specified name', () => {
-    expect(readDatasets(_mockedNote, _jerryDatasetName)).toMatchSnapshot();
+    expect(parseDatasets(_mockedNote, _jerryDatasetName)).toMatchSnapshot();
   });
 });
 

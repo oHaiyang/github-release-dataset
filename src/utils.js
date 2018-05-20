@@ -17,7 +17,7 @@ export function buildDatasetObj(name, dataset) {
   };
 }
 
-export function readDatasets(releaseNote, datasetName) {
+export function parseDatasets(releaseNote, datasetName) {
   let datasetMatch;
   let results = [];
 
@@ -47,6 +47,12 @@ export function readDatasets(releaseNote, datasetName) {
   } while (datasetMatch);
 
   return results;
+}
+
+export function readDataset(releaseNote, datasetName) {
+  const [{ dataset } = {}] = parseDatasets(releaseNote, datasetName);
+
+  return dataset;
 }
 
 export function insertIntoNote(note, text, top) {

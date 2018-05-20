@@ -2,9 +2,9 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var _slicedToArray = _interopDefault(require('babel-runtime/helpers/slicedToArray'));
 var _defineProperty = _interopDefault(require('babel-runtime/helpers/defineProperty'));
 var yaml = _interopDefault(require('js-yaml'));
-var _slicedToArray = _interopDefault(require('babel-runtime/helpers/slicedToArray'));
 var _regeneratorRuntime = _interopDefault(require('babel-runtime/regenerator'));
 var _extends = _interopDefault(require('babel-runtime/helpers/extends'));
 var _asyncToGenerator = _interopDefault(require('babel-runtime/helpers/asyncToGenerator'));
@@ -27,7 +27,7 @@ function buildDatasetObj(name, dataset) {
   return _ref = {}, _defineProperty(_ref, DATASET_KEY, name), _defineProperty(_ref, 'dataset', dataset), _ref;
 }
 
-function readDatasets(releaseNote, datasetName) {
+function parseDatasets(releaseNote, datasetName) {
   var datasetMatch = void 0;
   var results = [];
 
@@ -58,6 +58,18 @@ function readDatasets(releaseNote, datasetName) {
   } while (datasetMatch);
 
   return results;
+}
+
+function readDataset(releaseNote, datasetName) {
+  var _parseDatasets = parseDatasets(releaseNote, datasetName),
+      _parseDatasets2 = _slicedToArray(_parseDatasets, 1),
+      _parseDatasets2$ = _parseDatasets2[0];
+
+  _parseDatasets2$ = _parseDatasets2$ === undefined ? {} : _parseDatasets2$;
+  var dataset = _parseDatasets2$.dataset;
+
+
+  return dataset;
 }
 
 function insertIntoNote(note, text, top) {
@@ -205,7 +217,7 @@ var Smuggler = function () {
     key: 'getDataset',
     value: function () {
       var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3(tag, datasetName) {
-        var _ref6, releaseNote, _readDatasets, _readDatasets2, _readDatasets2$, dataset;
+        var _ref6, releaseNote;
 
         return _regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
@@ -217,12 +229,9 @@ var Smuggler = function () {
               case 2:
                 _ref6 = _context3.sent;
                 releaseNote = _ref6.body;
-                _readDatasets = readDatasets(releaseNote, datasetName), _readDatasets2 = _slicedToArray(_readDatasets, 1), _readDatasets2$ = _readDatasets2[0];
-                _readDatasets2$ = _readDatasets2$ === undefined ? {} : _readDatasets2$;
-                dataset = _readDatasets2$.dataset;
-                return _context3.abrupt('return', dataset);
+                return _context3.abrupt('return', readDataset(releaseNote, datasetName));
 
-              case 8:
+              case 5:
               case 'end':
                 return _context3.stop();
             }
@@ -254,7 +263,7 @@ var Smuggler = function () {
               case 2:
                 _ref8 = _context4.sent;
                 releaseNote = _ref8.body;
-                results = readDatasets(releaseNote, datasetName);
+                results = parseDatasets(releaseNote, datasetName);
 
                 if (!(results.length > 0)) {
                   _context4.next = 7;
@@ -292,7 +301,7 @@ var Smuggler = function () {
       var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee5(tag, datasetName, datasetOrUpdater) {
         var addIfNotExisting = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
-        var _ref10, releaseNote, _readDatasets3, _readDatasets4, result, newDataset, newDatasetCodeBlock, newReleaseNote;
+        var _ref10, releaseNote, _parseDatasets, _parseDatasets2, result, newDataset, newDatasetCodeBlock, newReleaseNote;
 
         return _regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
@@ -304,7 +313,7 @@ var Smuggler = function () {
               case 2:
                 _ref10 = _context5.sent;
                 releaseNote = _ref10.body;
-                _readDatasets3 = readDatasets(releaseNote, datasetName), _readDatasets4 = _slicedToArray(_readDatasets3, 1), result = _readDatasets4[0];
+                _parseDatasets = parseDatasets(releaseNote, datasetName), _parseDatasets2 = _slicedToArray(_parseDatasets, 1), result = _parseDatasets2[0];
 
                 if (!(!result && !addIfNotExisting)) {
                   _context5.next = 7;
@@ -351,7 +360,7 @@ var Smuggler = function () {
     key: 'deleteDataset',
     value: function () {
       var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee6(tag, datasetName) {
-        var _ref12, releaseNote, _readDatasets5, _readDatasets6, firstResult, start, length;
+        var _ref12, releaseNote, _parseDatasets3, _parseDatasets4, firstResult, start, length;
 
         return _regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
@@ -366,7 +375,7 @@ var Smuggler = function () {
 
 
                 // Only delete first meeted block
-                _readDatasets5 = readDatasets(releaseNote, datasetName), _readDatasets6 = _slicedToArray(_readDatasets5, 1), firstResult = _readDatasets6[0];
+                _parseDatasets3 = parseDatasets(releaseNote, datasetName), _parseDatasets4 = _slicedToArray(_parseDatasets3, 1), firstResult = _parseDatasets4[0];
 
                 if (!firstResult) {
                   _context6.next = 12;
@@ -404,5 +413,7 @@ var Smuggler = function () {
 
   return Smuggler;
 }();
+
+Smuggler.readDataset = readDataset;
 
 module.exports = Smuggler;

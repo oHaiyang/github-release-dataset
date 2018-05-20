@@ -3,7 +3,8 @@ import yaml from 'js-yaml';
 import {
   buildCodeBlock,
   buildDatasetObj,
-  readDatasets,
+  parseDatasets,
+  readDataset,
   insertIntoNote,
   getNewDataset,
   getSplicedNote,
@@ -60,15 +61,13 @@ class Smuggler {
 
   async getDataset(tag, datasetName) {
     const { body: releaseNote } = await this.getRelease(tag);
-    const [{ dataset } = {}] = readDatasets(releaseNote, datasetName);
-
-    return dataset;
+    return readDataset(releaseNote, datasetName);
   }
 
   async addDataset(tag, datasetName, dataset, insertTop = true) {
     let { body: releaseNote } = await this.getRelease(tag);
 
-    const results = readDatasets(releaseNote, datasetName);
+    const results = parseDatasets(releaseNote, datasetName);
     if (results.length > 0) {
       throw new Error(
         `Dataset named ${datasetName} already exists in ${tag}, failed to add.`
@@ -89,7 +88,7 @@ class Smuggler {
     addIfNotExisting = false
   ) {
     const { body: releaseNote } = await this.getRelease(tag);
-    const [result] = readDatasets(releaseNote, datasetName);
+    const [result] = parseDatasets(releaseNote, datasetName);
 
     if (!result && !addIfNotExisting) {
       throw new Error(
@@ -124,7 +123,7 @@ class Smuggler {
     let { body: releaseNote } = await this.getRelease(tag);
 
     // Only delete first meeted block
-    let [firstResult] = readDatasets(releaseNote, datasetName);
+    let [firstResult] = parseDatasets(releaseNote, datasetName);
 
     if (firstResult) {
       const { start, length } = firstResult;
@@ -135,5 +134,7 @@ class Smuggler {
     }
   }
 }
+
+Smuggler.readDataset = readDataset;
 
 export default Smuggler;
