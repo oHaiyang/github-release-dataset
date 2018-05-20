@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Smuggler = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.Smuggler = {})));
+}(this, (function (exports) { 'use strict';
 
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -35949,8 +35949,9 @@
 	  return Smuggler;
 	}();
 
-	Smuggler.readDataset = readDataset;
+	exports.readDataset = readDataset;
+	exports.default = Smuggler;
 
-	return Smuggler;
+	Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

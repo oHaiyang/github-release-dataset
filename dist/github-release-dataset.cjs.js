@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var _slicedToArray = _interopDefault(require('babel-runtime/helpers/slicedToArray'));
@@ -414,6 +416,5 @@ var Smuggler = function () {
   return Smuggler;
 }();
 
-Smuggler.readDataset = readDataset;
-
-module.exports = Smuggler;
+exports.readDataset = readDataset;
+exports.default = Smuggler;

@@ -202,6 +202,5 @@ class Smuggler {
   }
 }
 
-Smuggler.readDataset = readDataset;
-
 export default Smuggler;
+export { readDataset };
