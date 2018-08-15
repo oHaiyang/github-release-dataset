@@ -41,7 +41,7 @@ export default [
       babel({
         exclude: 'node_modules/**',
         runtimeHelpers: true,
-        plugins: ['external-helpers'],
+        plugins: ['external-helpers', 'transform-runtime'],
       }),
     ],
   },

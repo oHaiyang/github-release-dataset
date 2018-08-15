@@ -4,7 +4,14 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var _slicedToArray = _interopDefault(require('babel-runtime/helpers/slicedToArray'));
+var _defineProperty = _interopDefault(require('babel-runtime/helpers/defineProperty'));
 var yaml = _interopDefault(require('js-yaml'));
+var _regeneratorRuntime = _interopDefault(require('babel-runtime/regenerator'));
+var _extends = _interopDefault(require('babel-runtime/helpers/extends'));
+var _asyncToGenerator = _interopDefault(require('babel-runtime/helpers/asyncToGenerator'));
+var _classCallCheck = _interopDefault(require('babel-runtime/helpers/classCallCheck'));
+var _createClass = _interopDefault(require('babel-runtime/helpers/createClass'));
 var GitHub = _interopDefault(require('@octokit/rest'));
 
 // export for test
@@ -19,7 +26,7 @@ function buildCodeBlock(string) {
 function buildDatasetObj(name, dataset) {
   var _ref;
 
-  return _ref = {}, babelHelpers.defineProperty(_ref, DATASET_KEY, name), babelHelpers.defineProperty(_ref, 'dataset', dataset), _ref;
+  return _ref = {}, _defineProperty(_ref, DATASET_KEY, name), _defineProperty(_ref, 'dataset', dataset), _ref;
 }
 
 function parseDatasets(releaseNote, datasetName) {
@@ -57,7 +64,7 @@ function parseDatasets(releaseNote, datasetName) {
 
 function readDataset(releaseNote, datasetName) {
   var _parseDatasets = parseDatasets(releaseNote, datasetName),
-      _parseDatasets2 = babelHelpers.slicedToArray(_parseDatasets, 1),
+      _parseDatasets2 = _slicedToArray(_parseDatasets, 1),
       _parseDatasets2$ = _parseDatasets2[0];
 
   _parseDatasets2$ = _parseDatasets2$ === undefined ? {} : _parseDatasets2$;
@@ -92,7 +99,7 @@ function getNewDataset(newDatasetOrUpdater, oldDataset) {
 
 var Smuggler = function () {
   function Smuggler(token, owner, repo) {
-    babelHelpers.classCallCheck(this, Smuggler);
+    _classCallCheck(this, Smuggler);
 
     this.target = {
       owner: owner,
@@ -109,13 +116,13 @@ var Smuggler = function () {
     this.releases = {};
   }
 
-  babelHelpers.createClass(Smuggler, [{
+  _createClass(Smuggler, [{
     key: 'updateReleaseNote',
     value: function () {
-      var _ref = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(tag, releaseNote) {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(tag, releaseNote) {
         var _ref2, id;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -127,7 +134,7 @@ var Smuggler = function () {
                 id = _ref2.id;
                 _context.prev = 4;
                 _context.next = 7;
-                return this.g.repos.editRelease(babelHelpers.extends({}, this.target, {
+                return this.g.repos.editRelease(_extends({}, this.target, {
                   id: id,
                   tag_name: tag,
                   body: releaseNote
@@ -160,10 +167,10 @@ var Smuggler = function () {
   }, {
     key: 'getRelease',
     value: function () {
-      var _ref3 = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(tag) {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(tag) {
         var _ref4, release;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return _regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
@@ -177,7 +184,7 @@ var Smuggler = function () {
               case 2:
                 _context2.prev = 2;
                 _context2.next = 5;
-                return this.g.repos.getReleaseByTag(babelHelpers.extends({}, this.target, {
+                return this.g.repos.getReleaseByTag(_extends({}, this.target, {
                   tag: tag
                 }));
 
@@ -211,10 +218,10 @@ var Smuggler = function () {
   }, {
     key: 'getDataset',
     value: function () {
-      var _ref5 = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(tag, datasetName) {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3(tag, datasetName) {
         var _ref6, releaseNote;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return _regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
@@ -243,12 +250,12 @@ var Smuggler = function () {
   }, {
     key: 'addDataset',
     value: function () {
-      var _ref7 = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(tag, datasetName, dataset) {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee4(tag, datasetName, dataset) {
         var insertTop = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
         var _ref8, releaseNote, results, yamlString, codeBlock;
 
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return _regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
@@ -293,12 +300,12 @@ var Smuggler = function () {
   }, {
     key: 'updateDataset',
     value: function () {
-      var _ref9 = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(tag, datasetName, datasetOrUpdater) {
+      var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee5(tag, datasetName, datasetOrUpdater) {
         var addIfNotExisting = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
         var _ref10, releaseNote, _parseDatasets, _parseDatasets2, result, newDataset, newDatasetCodeBlock, newReleaseNote;
 
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        return _regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
@@ -308,7 +315,7 @@ var Smuggler = function () {
               case 2:
                 _ref10 = _context5.sent;
                 releaseNote = _ref10.body;
-                _parseDatasets = parseDatasets(releaseNote, datasetName), _parseDatasets2 = babelHelpers.slicedToArray(_parseDatasets, 1), result = _parseDatasets2[0];
+                _parseDatasets = parseDatasets(releaseNote, datasetName), _parseDatasets2 = _slicedToArray(_parseDatasets, 1), result = _parseDatasets2[0];
 
                 if (!(!result && !addIfNotExisting)) {
                   _context5.next = 7;
@@ -354,10 +361,10 @@ var Smuggler = function () {
   }, {
     key: 'deleteDataset',
     value: function () {
-      var _ref11 = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(tag, datasetName) {
+      var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee6(tag, datasetName) {
         var _ref12, releaseNote, _parseDatasets3, _parseDatasets4, firstResult, start, length;
 
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+        return _regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
@@ -370,7 +377,7 @@ var Smuggler = function () {
 
 
                 // Only delete first meeted block
-                _parseDatasets3 = parseDatasets(releaseNote, datasetName), _parseDatasets4 = babelHelpers.slicedToArray(_parseDatasets3, 1), firstResult = _parseDatasets4[0];
+                _parseDatasets3 = parseDatasets(releaseNote, datasetName), _parseDatasets4 = _slicedToArray(_parseDatasets3, 1), firstResult = _parseDatasets4[0];
 
                 if (!firstResult) {
                   _context6.next = 12;
@@ -405,6 +412,7 @@ var Smuggler = function () {
       return deleteDataset;
     }()
   }]);
+
   return Smuggler;
 }();
 
