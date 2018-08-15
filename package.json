@@ -27,6 +27,7 @@
   "homepage": "https://github.com/oHaiyang/github-release-dataset#readme",
   "dependencies": {
     "@octokit/rest": "^14.0.5",
+    "babel-runtime": "^6.26.0",
     "js-yaml": "^3.11.0"
   },
   "devDependencies": {
